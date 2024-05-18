@@ -97,6 +97,13 @@ public class LaneProperty {
 			}
 			scratchToKey = new int[][] { };
 			break;
+		case DTX:
+			keyToLane = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			laneToKey = new int[][] { {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} };
+			laneToScratch = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+			laneToSkinOffset = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+			scratchToKey = new int[][] { };
+			break;
 		default:
 			keyToLane = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 7 };
 			laneToKey = new int[][] { {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7,8} };
