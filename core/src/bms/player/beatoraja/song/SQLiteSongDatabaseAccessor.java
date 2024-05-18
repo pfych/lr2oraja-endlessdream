@@ -431,7 +431,7 @@ public class SQLiteSongDatabaseAccessor extends SQLiteDatabaseAccessor implement
 							}
 						}
 						if (s.endsWith(".bms") || s.endsWith(".bme") || s.endsWith(".bml") || s.endsWith(".pms")
-								|| s.endsWith(".bmson")) {
+								|| s.endsWith(".bmson") || s.endsWith(".dtx")) {
 							bmsfiles.add(p);
 						}
 					}
@@ -510,6 +510,7 @@ public class SQLiteSongDatabaseAccessor extends SQLiteDatabaseAccessor implement
 			int count = 0;
 			BMSDecoder bmsdecoder = null;
 			BMSONDecoder bmsondecoder = null;
+			DTXDecoder dtxDecoder = null;
 			final int len = records.size();
 			for (Path path : bmsfiles) {
 				long lastModifiedTime = -1;
@@ -542,6 +543,15 @@ public class SQLiteSongDatabaseAccessor extends SQLiteDatabaseAccessor implement
 						model = bmsondecoder.decode(path);
 					} catch (Exception e) {
 						Logger.getGlobal().severe("Error while decoding bmson at path: " + pathname + e.getMessage());
+					}
+				} else if (pathname.toLowerCase().endsWith(".dtx")) {
+					if (dtxDecoder == null) {
+						dtxDecoder = new DTXDecoder(BMSModel.LNTYPE_LONGNOTE);
+					}
+					try {
+						model = dtxDecoder.decode(path);
+					} catch (Exception e) {
+						Logger.getGlobal().severe("Error while decoding dtx at path: " + pathname + e.getMessage());
 					}
 				} else {
 					if (bmsdecoder == null) {
