@@ -396,13 +396,17 @@ public class LaneRenderer {
 			} else if (pos == i - 1) {
 				boolean b = true;
 				for (int lane = 0; lane < lanes.length; lane++) {
-					final Note note = tl.getNote(lane);
-					if (note != null && ((note instanceof LongNote
-							&& (((LongNote) note).isEnd() ? (LongNote) note : ((LongNote) note).getPair())
-									.getMicroTime() >= microtime)
-							|| (config.isShowpastnote() && note instanceof NormalNote && note.getState() == 0))) {
-						b = false;
-						break;
+					try {
+						final Note note = tl.getNote(lane);
+						if (note != null && ((note instanceof LongNote
+								&& (((LongNote) note).isEnd() ? (LongNote) note : ((LongNote) note).getPair())
+								.getMicroTime() >= microtime)
+								|| (config.isShowpastnote() && note instanceof NormalNote && note.getState() == 0))) {
+							b = false;
+							break;
+						}
+					} catch (Throwable err) {
+						Logger.getGlobal().severe("LAZILY SKIPPING OUT OF BOUNDS ERROR");
 					}
 				}
 				if (b) {
@@ -434,88 +438,92 @@ public class LaneRenderer {
 			}
 			// ノート描画
 			for (int lane = 0; lane < lanes.length; lane++) {
-				final float scale = lanes[lane].scale;
-				final Note note = tl.getNote(lane);
-				if (note != null) {
-					//4分のタイミングでノートを拡大する
-					float dstx = lanes[lane].region.x + offsetX;
-					float dsty = (float) y + offsetY - offsetH / 2;
-					float dstw = lanes[lane].region.width + offsetW;
-					float dsth = scale + offsetH;
-					if(skin.getNoteExpansionRate()[0] != 100 || skin.getNoteExpansionRate()[1] != 100) {
-						if((now - main.getNowQuarterNoteTime()) < noteExpansionTime) {
-							dstw *= 1 + (skin.getNoteExpansionRate()[0]/100.0f - 1) * (now - main.getNowQuarterNoteTime()) / noteExpansionTime;
-							dsth *= 1 + (skin.getNoteExpansionRate()[1]/100.0f - 1) * (now - main.getNowQuarterNoteTime()) / noteExpansionTime;
-							dstx -= (dstw - lanes[lane].region.width) / 2;
-							dsty -= (dsth - scale) / 2;
-						} else if((now - main.getNowQuarterNoteTime()) >= noteExpansionTime && (now - main.getNowQuarterNoteTime()) <= (noteExpansionTime + noteContractionTime)) {
-							dstw *= 1 + (skin.getNoteExpansionRate()[0]/100.0f - 1) * (noteContractionTime - (now - main.getNowQuarterNoteTime() - noteExpansionTime)) / noteContractionTime;
-							dsth *= 1 + (skin.getNoteExpansionRate()[1]/100.0f - 1) * (noteContractionTime - (now - main.getNowQuarterNoteTime() - noteExpansionTime)) / noteContractionTime;
-							dstx -= (dstw - lanes[lane].region.width) / 2;
-							dsty -= (dsth - scale) / 2;
+				try {
+					final float scale = lanes[lane].scale;
+					final Note note = tl.getNote(lane);
+					if (note != null) {
+						//4分のタイミングでノートを拡大する
+						float dstx = lanes[lane].region.x + offsetX;
+						float dsty = (float) y + offsetY - offsetH / 2;
+						float dstw = lanes[lane].region.width + offsetW;
+						float dsth = scale + offsetH;
+						if (skin.getNoteExpansionRate()[0] != 100 || skin.getNoteExpansionRate()[1] != 100) {
+							if ((now - main.getNowQuarterNoteTime()) < noteExpansionTime) {
+								dstw *= 1 + (skin.getNoteExpansionRate()[0] / 100.0f - 1) * (now - main.getNowQuarterNoteTime()) / noteExpansionTime;
+								dsth *= 1 + (skin.getNoteExpansionRate()[1] / 100.0f - 1) * (now - main.getNowQuarterNoteTime()) / noteExpansionTime;
+								dstx -= (dstw - lanes[lane].region.width) / 2;
+								dsty -= (dsth - scale) / 2;
+							} else if ((now - main.getNowQuarterNoteTime()) >= noteExpansionTime && (now - main.getNowQuarterNoteTime()) <= (noteExpansionTime + noteContractionTime)) {
+								dstw *= 1 + (skin.getNoteExpansionRate()[0] / 100.0f - 1) * (noteContractionTime - (now - main.getNowQuarterNoteTime() - noteExpansionTime)) / noteContractionTime;
+								dsth *= 1 + (skin.getNoteExpansionRate()[1] / 100.0f - 1) * (noteContractionTime - (now - main.getNowQuarterNoteTime() - noteExpansionTime)) / noteContractionTime;
+								dstx -= (dstw - lanes[lane].region.width) / 2;
+								dsty -= (dsth - scale) / 2;
+							}
 						}
-					}
-					if (note instanceof NormalNote) {
-						// draw normal note
-						if (lanes[lane].dstnote2 != Integer.MIN_VALUE) {
-							if (tl.getMicroTime() >= microtime && (note.getState() == 0 || note.getState() >= 4)) {
+						if (note instanceof NormalNote) {
+							// draw normal note
+							if (lanes[lane].dstnote2 != Integer.MIN_VALUE) {
+								if (tl.getMicroTime() >= microtime && (note.getState() == 0 || note.getState() >= 4)) {
+									final TextureRegion s = config.isMarkprocessednote() && note.getState() != 0
+											? lanes[lane].processedImage : lanes[lane].noteImage;
+									sprite.draw(s, dstx, dsty, dstw, dsth);
+								}
+							} else if (tl.getMicroTime() >= microtime || (config.isShowpastnote() && note.getState() == 0)) {
 								final TextureRegion s = config.isMarkprocessednote() && note.getState() != 0
-								? lanes[lane].processedImage : lanes[lane].noteImage;
+										? lanes[lane].processedImage : lanes[lane].noteImage;
 								sprite.draw(s, dstx, dsty, dstw, dsth);
 							}
-						} else if (tl.getMicroTime() >= microtime || (config.isShowpastnote() && note.getState() == 0)) {
-							final TextureRegion s = config.isMarkprocessednote() && note.getState() != 0
-									? lanes[lane].processedImage : lanes[lane].noteImage;
-							sprite.draw(s, dstx, dsty, dstw, dsth);
-						}
-					} else if (note instanceof LongNote) {
-						final LongNote ln = (LongNote) note;
-						if (!ln.isEnd() && ln.getPair().getMicroTime() >= microtime) {
-							// if (((LongNote) note).getEnd() == null) {
-							// Logger.getGlobal().warning(
-							// "LN終端がなく、モデルが正常に表示されません。LN開始時間:"
-							// + ((LongNote) note)
-							// .getStart()
-							// .getTime());
-							// } else {
-							double dy = 0;
-							TimeLine prevtl = tl;
-							for (int j = i + 1; j < timelines.length
-									&& prevtl.getSection() != ln.getPair().getSection(); j++) {
-								final TimeLine nowtl = timelines[j];
-								if (nowtl.getMicroTime() >= microtime) {
-									if (prevtl.getMicroTime() + prevtl.getMicroStop() > microtime) {
-										dy += (nowtl.getSection() - prevtl.getSection()) * prevtl.getScroll() * rxhs;
-									} else {
-										dy += (nowtl.getSection() - prevtl.getSection()) * prevtl.getScroll()
-												* (nowtl.getMicroTime() - microtime)
-												/ (nowtl.getMicroTime() - prevtl.getMicroTime() - prevtl.getMicroStop())
-												* rxhs;
+						} else if (note instanceof LongNote) {
+							final LongNote ln = (LongNote) note;
+							if (!ln.isEnd() && ln.getPair().getMicroTime() >= microtime) {
+								// if (((LongNote) note).getEnd() == null) {
+								// Logger.getGlobal().warning(
+								// "LN終端がなく、モデルが正常に表示されません。LN開始時間:"
+								// + ((LongNote) note)
+								// .getStart()
+								// .getTime());
+								// } else {
+								double dy = 0;
+								TimeLine prevtl = tl;
+								for (int j = i + 1; j < timelines.length
+										&& prevtl.getSection() != ln.getPair().getSection(); j++) {
+									final TimeLine nowtl = timelines[j];
+									if (nowtl.getMicroTime() >= microtime) {
+										if (prevtl.getMicroTime() + prevtl.getMicroStop() > microtime) {
+											dy += (nowtl.getSection() - prevtl.getSection()) * prevtl.getScroll() * rxhs;
+										} else {
+											dy += (nowtl.getSection() - prevtl.getSection()) * prevtl.getScroll()
+													* (nowtl.getMicroTime() - microtime)
+													/ (nowtl.getMicroTime() - prevtl.getMicroTime() - prevtl.getMicroStop())
+													* rxhs;
+										}
 									}
+									prevtl = nowtl;
 								}
-								prevtl = nowtl;
+								if (dy > 0) {
+									final float dscale = dsth > scale ? (dsth - scale) / 2 : 0;
+									this.drawLongNote(sprite, lanes[lane].longImage, dstx, (float) (dsty + dy), dstw,
+											(float) (dsty < (lanes[lane].region.y - dscale) ? dsty - (lanes[lane].region.y - dscale) : dy), dsth, lane,
+											ln);
+								}
+								// System.out.println(dy);
 							}
-							if (dy > 0) {
-								final float dscale = dsth > scale ? (dsth - scale) / 2 : 0;
-								this.drawLongNote(sprite, lanes[lane].longImage, dstx, (float) (dsty + dy), dstw,
-										(float) (dsty < (lanes[lane].region.y - dscale) ? dsty - (lanes[lane].region.y -dscale) : dy), dsth, lane,
-										ln);
+						} else if (note instanceof MineNote) {
+							// draw mine note
+							if (tl.getMicroTime() >= microtime) {
+								sprite.draw(lanes[lane].mineImage, dstx, dsty, dstw, dsth);
 							}
-							// System.out.println(dy);
-						}
-					} else if (note instanceof MineNote) {
-						// draw mine note
-						if (tl.getMicroTime() >= microtime) {
-							sprite.draw(lanes[lane].mineImage, dstx, dsty, dstw, dsth);
 						}
 					}
-				}
-				// hidden note
-				if (config.isShowhiddennote() && tl.getMicroTime() >= microtime) {
-					final Note hnote = tl.getHiddenNote(lane);
-					if (hnote != null) {
-						sprite.draw(lanes[lane].hiddenImage, lanes[lane].region.x, (float) y, lanes[lane].region.width, scale);
+					// hidden note
+					if (config.isShowhiddennote() && tl.getMicroTime() >= microtime) {
+						final Note hnote = tl.getHiddenNote(lane);
+						if (hnote != null) {
+							sprite.draw(lanes[lane].hiddenImage, lanes[lane].region.x, (float) y, lanes[lane].region.width, scale);
+						}
 					}
+				} catch(Throwable e) {
+					Logger.getGlobal().severe("LAZILY SKIPPING OUT OF BOUNDS ERROR");
 				}
 			}
 		}
