@@ -201,6 +201,8 @@ public class PlayerConfig {
 	private PlayModeConfig mode24 = new PlayModeConfig(Mode.KEYBOARD_24K);
 
 	private PlayModeConfig mode24double = new PlayModeConfig(Mode.KEYBOARD_24K_DOUBLE);
+
+	private PlayModeConfig modeDTX = new PlayModeConfig(Mode.DTX);
 	/**
 	 * HIDDENノートを表示するかどうか
 	 */
@@ -388,6 +390,8 @@ public class PlayerConfig {
 			return getMode24();
 		case KEYBOARD_24K_DOUBLE:
 			return getMode24double();
+		case DTX:
+			return getModeDTX();
 		default:
 			return getMode7();
 		}
@@ -480,6 +484,14 @@ public class PlayerConfig {
 
 	public void setMode24double(PlayModeConfig mode24double) {
 		this.mode24double = mode24double;
+	}
+
+	public PlayModeConfig getModeDTX() {
+		return modeDTX;
+	}
+
+	public void setModeDTX(PlayModeConfig modeDTX) {
+		this.modeDTX = modeDTX;
 	}
 
 	public void setMode(Mode m)  {

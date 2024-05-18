@@ -28,7 +28,7 @@ public enum SkinType {
 	PLAY_24KEYS(16, "24KEYS", Mode.KEYBOARD_24K, false),
 	PLAY_24KEYS_DOUBLE(17, "24KEYS DOUBLE", Mode.KEYBOARD_24K_DOUBLE, false),
 	PLAY_24KEYS_BATTLE(18, "24KEYS BATTLE", Mode.KEYBOARD_24K, true),
-	;
+	PLAY_DTX(19, "DTX", Mode.DTX, false);
 
 	/**
 	 * スキンタイプのID

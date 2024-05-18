@@ -34,9 +34,9 @@ public class KeyConfiguration extends MainState {
 
 	private BitmapFont titlefont;
 
-	private static final String[] MODE = { "5 KEYS", "7 KEYS", "9 KEYS", "10 KEYS", "14 KEYS", "24 KEYS", "24 KEYS DOUBLE" };
+	private static final String[] MODE = { "5 KEYS", "7 KEYS", "9 KEYS", "10 KEYS", "14 KEYS", "24 KEYS", "24 KEYS DOUBLE", "DTX" };
 	private static final Mode[] MODE_HINT = { Mode.BEAT_5K,Mode.BEAT_7K, Mode.POPN_9K, Mode.BEAT_10K, Mode.BEAT_14K, Mode.KEYBOARD_24K,
-			Mode.KEYBOARD_24K_DOUBLE };
+			Mode.KEYBOARD_24K_DOUBLE, Mode.DTX };
 
 	private static final String[][] KEYS = {
 			{ "1 KEY", "2 KEY", "3 KEY", "4 KEY", "5 KEY", "F-SCR", "R-SCR", "START", "SELECT" },
@@ -55,7 +55,8 @@ public class KeyConfiguration extends MainState {
 					"1P-A2", "1P-A#2", "1P-B2", "1P-WHEEL-UP", "1P-WHEEL-DOWN", "2P-C1", "2P-C#1", "2P-D1", "2P-D#1",
 					"2P-E1", "2P-F1", "2P-F#1", "2P-G1", "2P-G#1", "2P-A1", "2P-A#1", "2P-B1", "2P-C2", "2P-C#2",
 					"2P-D2", "2P-D#2", "2P-E2", "2P-F2", "2P-F#2", "2P-G2", "2P-G#2", "2P-A2", "2P-A#2", "2P-B2",
-					"2P-WHEEL-UP", "2P-WHEEL-DOWN", "START", "SELECT" } };;
+					"2P-WHEEL-UP", "2P-WHEEL-DOWN", "START", "SELECT" },
+			{"Hi-Hat Closed", "Snare", "Bass Drum", "High Tom", "Low Tom", "Cymbal", "Floor Tom", "Hi-Hat Open", "Ride Cymbal", "Left Cymbal"}};;
 	private static final int[][] KEYSA = { { 0, 1, 2, 3, 4, 5, 6, -1, -2 },
 			{ 0, 1, 2, 3, 4, 5, 6, 7, 8, -1, -2 },
 			{ 0, 1, 2, 3, 4, 5, 6, 7, 8, -1, -2 },
@@ -64,7 +65,8 @@ public class KeyConfiguration extends MainState {
 			{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -2 },
 			{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
 					29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1,
-					-2 } };
+					-2 },
+			{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }};
 	private static final int playerOffset = 100;
 
 	private static final String[] SELECTKEY = { "2dx sp", "popn", "2dx dp" };

@@ -179,6 +179,7 @@ public class SkinConfig implements Validatable {
 		PLAY24DOUBLE(SkinType.PLAY_24KEYS_DOUBLE, "skin/default/play24double.json"),
 		KEYCONFIG(SkinType.KEY_CONFIG, "skin/default/keyconfig/keyconfig.luaskin"),
 		SKINSELECT(SkinType.SKIN_SELECT, "skin/default/skinselect/skinselect.luaskin"),
+		DTX(SkinType.PLAY_DTX, "skin/default/play14.json") // @TODO Correct DTX Skin types
 		;
 
 		public final SkinType type;

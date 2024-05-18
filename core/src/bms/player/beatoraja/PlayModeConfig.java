@@ -251,6 +251,10 @@ public class PlayModeConfig {
                             Keys.UNKNOWN, Keys.SHIFT_RIGHT, Keys.CONTROL_RIGHT };
                     keys = Arrays.copyOf(keys, 52);
                     break;
+                case DTX:
+                    keys = new int[] { Keys.Z, Keys.S, Keys.X, Keys.D, Keys.C, Keys.SHIFT_LEFT,
+                            Keys.CONTROL_LEFT, Keys.COMMA, Keys.L, Keys.PERIOD, Keys.SEMICOLON, Keys.SLASH, Keys.SHIFT_RIGHT, Keys.CONTROL_RIGHT };
+                    break;
             }
             if(!enable) {
                 Arrays.fill(keys, -1);
@@ -350,6 +354,9 @@ public class PlayModeConfig {
                     break;
                 case KEYBOARD_24K_DOUBLE:
                     keys = new int[52];
+                    break;
+                case DTX:
+                    keys = new int[10];
                     break;
             }
             Arrays.fill(keys, -1);
@@ -536,6 +543,8 @@ public class PlayModeConfig {
                     case KEYBOARD_24K_DOUBLE:
                         keys = Arrays.copyOf(con.keys, 52);
                         break;
+                    case DTX:
+                        keys = new int[]{ 0, 1, 2, 3, 4, 5, 6 ,7 ,8 ,9 };
                 }
             } else {
                 switch (mode) {
@@ -796,6 +805,18 @@ public class PlayModeConfig {
                     start = new Input(Input.Type.NOTE, 44);
                     select = new Input(Input.Type.NOTE, 46);
                     break;
+                case DTX:
+                    keys = new Input[10];
+                    keys[0] = new Input(Input.Type.NOTE, 42); // HiHat Closed
+                    keys[1] = new Input(Input.Type.NOTE, 38); // Snare
+                    keys[2] = new Input(Input.Type.NOTE, 36); // BassDrum
+                    keys[3] = new Input(Input.Type.NOTE, 48); // HighTom
+                    keys[4] = new Input(Input.Type.NOTE, 47); // LowTom
+                    keys[5] = new Input(Input.Type.NOTE, 51); // Cymbal
+                    keys[6] = new Input(Input.Type.NOTE, 43); // FloorTom
+                    keys[7] = new Input(Input.Type.NOTE, 46); // HiHatOpen
+                    keys[8] = new Input(Input.Type.NOTE, 20); // RideCymbal
+                    keys[9] = new Input(Input.Type.NOTE, 49); // LeftCymbal
             }
             if(!enable) {
                 Arrays.fill(keys, null);

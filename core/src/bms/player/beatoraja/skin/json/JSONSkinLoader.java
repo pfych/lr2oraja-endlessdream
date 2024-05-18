@@ -281,6 +281,7 @@ public class JSONSkinLoader extends SkinLoader {
 			case PLAY_14KEYS:
 			case PLAY_24KEYS:
 			case PLAY_24KEYS_DOUBLE:
+			case PLAY_DTX:
 				objectLoader = new JsonPlaySkinObjectLoader(this);
 				break;
 			case DECIDE:
